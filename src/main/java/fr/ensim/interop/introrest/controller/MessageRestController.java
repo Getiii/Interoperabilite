@@ -49,7 +49,8 @@ public class MessageRestController {
 
 	public ApiResponseUpdateTelegram getUpdate(){
 		RestTemplate restTemplate = new RestTemplate();
-		ApiResponseUpdateTelegram responseTelegram = restTemplate.postForObject(telegramUrl + botId + "/getUpdates?offset=-1", null, ApiResponseUpdateTelegram.class);
+		ApiResponseUpdateTelegram responseTelegram = restTemplate.postForObject(telegramUrl + botId + "/getUpdates?offset=-1",
+				null, ApiResponseUpdateTelegram.class);
 		return responseTelegram;
 	}
 
