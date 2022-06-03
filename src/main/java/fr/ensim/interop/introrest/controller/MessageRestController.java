@@ -36,7 +36,6 @@ public class MessageRestController {
 		}
 
 		MessageSend messageSend = new MessageSend(message.getText());
-		System.out.println(message.getText());
 
 		ApiResponseTelegram responseTelegram = restTemplate.postForObject(telegramUrl + botId + "/sendMessage",
 				messageSend, ApiResponseTelegram.class);
@@ -47,11 +46,31 @@ public class MessageRestController {
 
 	}
 
+	@GetMapping("/update")
 	public ApiResponseUpdateTelegram getUpdate(){
+
 		RestTemplate restTemplate = new RestTemplate();
-		ApiResponseUpdateTelegram responseTelegram = restTemplate.postForObject(telegramUrl + botId + "/getUpdates?offset=-1",
-				null, ApiResponseUpdateTelegram.class);
+		ApiResponseUpdateTelegram responseTelegram = restTemplate.getForObject(telegramUrl + botId + "/getUpdates?offset=-1", ApiResponseUpdateTelegram.class);
 		return responseTelegram;
 	}
 
+	@GetMapping("/commandes")
+	public void getCommandeDisponible() {
+		RestTemplate restTemplate = new RestTemplate();
+
+		String command = "La commande que vous avez saisie n'est pas correct.\n" +
+				"Veuillez utiliser une des commandes suivantes :\n" +
+				"\tmétéo/weather nom de la ville : pour avoir la météo du jour de la ville.\n" +
+				"\tblague pour n'importe quelle type de blague.\n" +
+				"\tblague nulle pour une blague noté en dessous de 5.\n" +
+				"\tblague drole pour une blague noté en dessus de 6.";
+
+		MessageSend messageSend = new MessageSend(command);
+
+		ApiResponseTelegram responseTelegram = restTemplate.postForObject(telegramUrl + botId + "/sendMessage",
+				messageSend, ApiResponseTelegram.class);
+
+		System.out.println(ResponseEntity.ok(responseTelegram));
+
+	}
 }

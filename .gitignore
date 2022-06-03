@@ -3,6 +3,7 @@
 
 src/ressources/*
 
+/target
 # .idea
 .idea/*
 

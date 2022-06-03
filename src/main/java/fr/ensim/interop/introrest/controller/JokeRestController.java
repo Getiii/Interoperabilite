@@ -1,16 +1,20 @@
 package fr.ensim.interop.introrest.controller;
 
 
+import fr.ensim.interop.introrest.model.joke.Joke;
 import fr.ensim.interop.introrest.model.joke.Jokes;
 import fr.ensim.interop.introrest.model.telegram.ApiResponseTelegram;
-import fr.ensim.interop.introrest.model.telegram.Chat;
-import fr.ensim.interop.introrest.model.telegram.Message;
 import fr.ensim.interop.introrest.model.telegram.MessageSend;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 
 @RestController
@@ -25,21 +29,40 @@ public class JokeRestController {
 
 
     @GetMapping(value = "/joke")
-    public ResponseEntity<ApiResponseTelegram> joke(){
+    public ResponseEntity<Joke> joke(){
+
+        jokes = Jokes.getInstance();
+        Joke jokePick = jokes.getRandom();
+
+        return ResponseEntity.ok(jokePick);
+
+    }
+
+    public ResponseEntity<Joke> joke(int niveau){
 
         RestTemplate restTemplate = new RestTemplate();
         jokes = Jokes.getInstance();
 
-        MessageSend messageSend = new MessageSend(jokes.getRandom().getBlague());
 
-        System.out.println(messageSend.chat_id);
+        System.out.println(niveau);
+        ArrayList<Joke> listBlague = new ArrayList<>();
 
-        ApiResponseTelegram response = restTemplate.postForObject(telegramUrl + botId + "/sendMessage",
-                messageSend, ApiResponseTelegram.class);
+        for (Map.Entry mapentry : jokes.value().entrySet()) {
+            if (niveau == 2){
+                if (((Joke)mapentry.getValue()).getNote() < 5)
+                    listBlague.add((Joke)mapentry.getValue());
+            }else if (niveau == 1){
+                if (((Joke)mapentry.getValue()).getNote() > 5)
+                    listBlague.add((Joke)mapentry.getValue());
+            }
+        }
 
-        System.out.println(ResponseEntity.ok(response));
 
-        return ResponseEntity.ok(response);
+        Collections.shuffle(listBlague);
+        Joke jokePick = listBlague.get(0);
 
+        return ResponseEntity.ok(jokePick);
     }
+
+
 }

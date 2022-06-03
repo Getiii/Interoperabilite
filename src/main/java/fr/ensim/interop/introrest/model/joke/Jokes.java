@@ -14,7 +14,7 @@ public final class Jokes {
     private Jokes(){
 
         /*Création des blagues : */
-        Joke j1 = new Joke(id.incrementAndGet(), "Plage", "La plage dit à l'océan:dire que tout le monde aime l'eau c'est assez vague.", 5);
+        Joke j1 = new Joke(id.incrementAndGet(), "Plage", "La plage dit à l'océan:\ndire que tout le monde aime l'eau c'est assez vague.", 5);
         listBlague.put(j1.getId(), j1);
 
         Joke j2 = new Joke(id.incrementAndGet(), "Alligator", "Comment appelle-t-on un alligator qui enquête? \n Un investi-gator.",9);
@@ -37,6 +37,10 @@ public final class Jokes {
             instance = new Jokes();
         }
         return instance;
+    }
+
+    public Map<Integer, Joke> value(){
+        return listBlague;
     }
 
     public Joke getRandom() {

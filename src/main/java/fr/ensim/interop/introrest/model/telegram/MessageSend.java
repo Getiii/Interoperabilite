@@ -1,11 +1,8 @@
 package fr.ensim.interop.introrest.model.telegram;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class MessageSend {
 
     public String chat_id = "5556461794";
-
     public String text;
 
     public MessageSend(String message) {
