@@ -3,6 +3,9 @@
 
 src/ressources/*
 
+
+src/main/resources/application.properties
+
 /target
 # .idea
 .idea/*
